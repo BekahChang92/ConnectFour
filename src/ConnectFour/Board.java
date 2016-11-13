@@ -1,3 +1,5 @@
+package ConnectFour;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -13,9 +15,9 @@ public class Board {
 	private int rows = 8;
 	private int columns= 8;
         private char[][] board = createBoard();
- 
+        private char c = 'a';
 	public Board(){
-
+          board = createBoard();
 	} 
 
 	//create 2-d array representing the board
@@ -24,7 +26,7 @@ public class Board {
 		//set inital value of each block to 0(unmarked, empty block)
 		for(int r =0; r < rows; r++){
 			for(int c=0; c<columns; c++){
-				board[r][c]=0;
+				board[r][c]=this.c;
 			}
 		}
                 return board;
