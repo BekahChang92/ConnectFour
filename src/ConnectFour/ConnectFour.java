@@ -9,55 +9,75 @@ import java.util.Scanner;
  *
  * @author rebekah
  */
-public class ConnectFour extends JFrame implements ActionListener {
+public class ConnectFour extends JFrame{
     
-    private Container contents;
-    private JButton[][] connect4board;
-    private JPanel welcome, gameBoard;
+    private JPanel content;
     private char[][] board;
-    private JButton startbutton;
-    public ConnectFour(char[][] board){
+    private CardLayout cl;
+    public ConnectFour(){
         super("Connect Four");
-        this.board = board;
-        contents = getContentPane();
-        ButtonHandler bh = new ButtonHandler();
+        Board boardObj = new Board();
+        cl = new CardLayout();
+        char[][] board=boardObj.getCurrentBoard();
+        JButton[][] connect4board = new JButton[board[0].length][board.length];
+        StartButtonHandler bh = new StartButtonHandler();
+        content = new JPanel();
+        content.setLayout(cl);
         //welcome screen or panel
-        welcome = new JPanel();
+        JPanel welcome = new JPanel();
         welcome.setLayout(new BoxLayout(welcome, BoxLayout.PAGE_AXIS));
-        JLabel welcometext = new JLabel("Let's play Connect 4!");
+        JLabel welcomeText = new JLabel("Let's play Connect 4!");
         JLabel startText = new JLabel("Press 'Start' to being the game!");
-        JButton startbutton = new JButton("Start");
-        startbutton.addActionListener(bh);
-        welcome.add(welcometext);
+        JButton startButton = new JButton("Start");
+        
+        welcome.add(welcomeText);
         welcome.add(startText);
-        welcome.add(startbutton);
-        contents.add(welcome);
-        setSize(500, 750);
-        setVisible(true);
+        welcome.add(startButton, "Start");
+        content.add(welcome, "Welcome");
         
-        /*JPanel panel1 = new JPanel();
-        panel1.setSize(500, 750);
-        //board will go in panel 2
-        JPanel panel2 = new JPanel();
-        panel2.setSize(750, 750);
-        JPanel panel3 = new JPanel();
-        panel3.setSize(500, 750);
-        */
-        
-    }
-    public void actionPerformed(ActionEvent e){
-        if(e.getSource() == startbutton){
-            gameBoard = new JPanel( new GridLayout());
-            
-        }
-    }
-    public JButton[][] getBoard(){
+        //game screen or panel
+        JPanel gamePanel = new JPanel(new FlowLayout());
+        JPanel player1panel, player2panel;
+        player1panel = new JPanel();
+        player2panel = new JPanel();
+        player1panel.setLayout(new BoxLayout(player1panel, BoxLayout.PAGE_AXIS));
+        player2panel.setLayout(new BoxLayout(player2panel, BoxLayout.PAGE_AXIS));
+        JLabel player1label = new JLabel("PLAYER 1");
+        player1panel.add(player1label);
+        JLabel player2label = new JLabel("PLAYER 2");
+        player2panel.add(player2label);
+        JPanel gameBoard = new JPanel( new GridLayout(board[0].length, board.length));
         for(int i = 0; i < board[0].length; i++) {
             for(int j = 0; j<board.length; j++) {
-                connect4board[i][j] = new JButton();
+                connect4board[i][j] = new JButton(String.valueOf(board[i][j]));
+                connect4board[i][j].addActionListener(new ActionListener(){
+                    public void actionPerformed(ActionEvent ae){
+                     JLabel show = new JLabel();
+                     
+                    }
+                });
+                gameBoard.add(connect4board[i][j]);
             }
         }
-        return connect4board;
+        gamePanel.add(player1panel, "PLAYER1");
+        gamePanel.add(gameBoard, "BOARD");
+        gamePanel.add(player2panel, "PLAYER2");
+        content.add(gamePanel, "Game");
+        getContentPane().add(content);
+        cl.show(content, "Welcome");
+        setSize(800,800);
+        setVisible(true);
+        
+        startButton.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                cl.show(content, "Game");
+            }
+        });
+    }
+    private class StartButtonHandler implements ActionListener{
+        public void actionPerformed(ActionEvent e){
+            
+        }        
     }
     
     public static void main(String[] args){
@@ -69,7 +89,7 @@ public class ConnectFour extends JFrame implements ActionListener {
         player2 = sc.next(); */
         Board board1 = new Board();
         char[][]board = board1.getCurrentBoard();
-        ConnectFour connectFour = new ConnectFour(board);
+        ConnectFour connectFour = new ConnectFour();
     }
 }
 
