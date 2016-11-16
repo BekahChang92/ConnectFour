@@ -20,7 +20,6 @@ public class ConnectFour extends JFrame{
         cl = new CardLayout();
         char[][] board=boardObj.getCurrentBoard();
         JButton[][] connect4board = new JButton[board[0].length][board.length];
-        StartButtonHandler bh = new StartButtonHandler();
         content = new JPanel();
         content.setLayout(cl);
         //welcome screen or panel
@@ -52,8 +51,8 @@ public class ConnectFour extends JFrame{
                 connect4board[i][j] = new JButton(String.valueOf(board[i][j]));
                 connect4board[i][j].addActionListener(new ActionListener(){
                     public void actionPerformed(ActionEvent ae){
-                     JLabel show = new JLabel();
-                     
+                        boardObj.placeChip(j, player);
+                        ae.getSource();                 
                     }
                 });
                 gameBoard.add(connect4board[i][j]);
@@ -73,13 +72,8 @@ public class ConnectFour extends JFrame{
                 cl.show(content, "Game");
             }
         });
+        boolean winnerNotFound=true;
     }
-    private class StartButtonHandler implements ActionListener{
-        public void actionPerformed(ActionEvent e){
-            
-        }        
-    }
-    
     public static void main(String[] args){
         /*Scanner sc = new Scanner(System.in);
         System.out.println("Welcome to Connect Four!");
@@ -91,5 +85,5 @@ public class ConnectFour extends JFrame{
         char[][]board = board1.getCurrentBoard();
         ConnectFour connectFour = new ConnectFour();
     }
-}
+} 
 
