@@ -15,7 +15,7 @@ public class Board {
 	private int rows = 8;
 	private int columns= 8;
         private char[][] board = createBoard();
-        private char c = 'a';
+        private char c = '-';
 	public Board(){
           board = createBoard();
 	} 
@@ -32,27 +32,31 @@ public class Board {
                 return board;
 	}
 	//marks block in array chosen by user
-	public void placeChip(int column, char player){
+	public boolean placeChipAndCheckWinner(int column, int turn){
+            int row = 0;
+            Player player = turn%2 ==0 ? Player.PlayerOne : Player.PlayerTwo;
 		for(int r=0; r<rows; r++){
 			//mark the first unmarked block in the column.
-			if(board[r][column]==0){
-				board[r][column]=player;
-				break;
+			if(board[r][column]=='-'){
+				board[r][column] = player.chip();
+				row = r;
+                                break;
 			}
 		}
-	}
+                return didSomeoneWin(row, column, player);
+        }
 
-	public boolean didSomeoneWin(int row, int column, char player){
+	public boolean didSomeoneWin(int row, int column, Player player){
 		//horizontal check
 		int chipsInARow =1;
 		int currentColumn = column;
 		//check for player chips to the right
-		while(chipsInARow < 4 && board[row][currentColumn] == player){
+		while(chipsInARow < 4 && board[row][currentColumn] == player.chip()){
 			chipsInARow++;
 			currentColumn++;
 		}
 		//check for player chips to the left
-		while(chipsInARow <4 && board[row][currentColumn] == player){
+		while(chipsInARow <4 && board[row][currentColumn] == player.chip()){
 			chipsInARow++;
 			currentColumn--;
 		}
@@ -63,11 +67,11 @@ public class Board {
 		//else, reset chipsInARow, currentColumn and check vertical
 		chipsInARow = 1;
 		int currentRow = row;
-		while(chipsInARow <4 && board[currentRow][column]==player){
+		while(chipsInARow <4 && board[currentRow][column]==player.chip()){
 			chipsInARow++;
 			currentRow++;
 		}
-		while(chipsInARow<4 && board[currentRow][column]==player){
+		while(chipsInARow<4 && board[currentRow][column]==player.chip()){
 			chipsInARow++;
 			currentRow--;
 		}
@@ -80,12 +84,15 @@ public class Board {
 		currentRow= row;
 		currentColumn= column;
 		//start left to right diagonal check
-		while(chipsInARow < 4 && board[currentRow][currentColumn] ==player){
+		while(chipsInARow < 4 && board[currentRow][currentColumn] ==player.chip() && currentRow > 0){
 			chipsInARow++;
 			currentColumn++;
-			currentRow--;
+                        if(currentRow ==0){ 
+			break;
+                        }
+                        currentRow--;
 		}
-		while(chipsInARow < 4 && board[currentRow][currentColumn] ==player){
+		while(chipsInARow < 4 && board[currentRow][currentColumn] ==player.chip() && currentRow <8){
 			chipsInARow++;
 			currentColumn--;
 			currentRow++;
@@ -95,12 +102,12 @@ public class Board {
 			return true;
 		}
 		//else start right to left diagonal check
-		while(chipsInARow < 4 && board[currentRow][currentColumn] ==player){
+		while(chipsInARow < 4 && board[currentRow][currentColumn] == player.chip()&& currentRow > 0 && currentColumn > 0){
 			chipsInARow++;
 			currentColumn--;
 			currentRow--;
 		}
-		while(chipsInARow < 4 && board[currentRow][currentColumn] ==player){
+		while(chipsInARow < 4 && board[currentRow][currentColumn] ==player.chip() && currentRow < 8  && currentColumn < 8){
 			chipsInARow++;;
 			currentColumn++;
 			currentRow++;
@@ -116,7 +123,6 @@ public class Board {
 	public char[][] getCurrentBoard(){
 		return board;
 	}
-
 
 }
 

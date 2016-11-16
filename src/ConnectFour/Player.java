@@ -5,10 +5,27 @@
  */
 package ConnectFour;
 
+import java.awt.Color;
+
 /**
  *
  * @author rebekah
  */
-public class Player {
-    
+public enum Player{
+    PlayerOne(Color.RED, 'X'),
+    PlayerTwo(Color.BLUE, 'O');
+            
+    private Color color;
+    private char chip;
+    Player(Color color, char chip){
+        this.color = color;
+        this.chip = chip;
+    }
+    public Color color(){
+        return color;
+    }
+    public char chip(){
+        return chip;
+    }
+             
 }
